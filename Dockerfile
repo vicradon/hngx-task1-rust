@@ -18,11 +18,16 @@ RUN cargo build --release
 # Use a smaller base image for the final release container
 FROM debian:buster-slim
 
+WORKDIR /app
+
 # Copy the built binary from the builder stage
-COPY --from=builder /app/target/release/app /usr/local/bin/app
+COPY --from=builder /app/target/release/hngxjsongetter ./hngxjsongetter
+
+RUN chmod +x ./hngxjsongetter
 
 # Expose the port that your Actix web server listens on
 EXPOSE 8080
 
 # Start your Actix web server when the container starts
-CMD ["/usr/local/bin/app"]
+CMD ["./hngxjsongetter"]
+
